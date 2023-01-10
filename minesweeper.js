@@ -92,15 +92,18 @@ function startGame() {
     //populate board
     for(let r = 0; r < rows; r++) {
         let row = [];
+        let row_element = document.createElement('tr');
         for (let c = 0; c < columns; c++) {
             // creating <div id = '0-0><\div>
-            let tile = document.createElement('div');
+            let tile = document.createElement('td');
             tile.id = r.toString() + '-' + c.toString();
             tile.addEventListener('click', clickTile);
-            document.getElementById('board').append(tile);
+            tile.classList.add('tile')
+            row_element.append(tile)
             row.push(tile)
         }
         board.push(row);
+        document.getElementById('board').append(row_element);
     }
     // console.log(board)
 }
