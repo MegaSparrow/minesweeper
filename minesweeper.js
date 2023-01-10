@@ -1,8 +1,17 @@
 var board = [];
-var rows = 8;
-var columns = 8;
 
+var rows = 8;
+const maxRows = 15;
+const minRows = 1;
+
+var columns = 8;
+const maxColumns = 15;
+const minColumns = 1;
+
+const maxMines = rows*columns - 1;
+const minMines = 1;
 var minesCount = 5;
+var minesRemaining = minesCount;
 var minesLocation = []; // '2-1', '3-2'
 
 var tilesClicked = 0; // goal to click all tiles except the mines
@@ -10,10 +19,58 @@ var flagEnabled = false;
 
 var gameOver = false;
 
-window.onload = startGame;
+window.onload = function () {
+    setupGame();
+}
+
+function clearBoard() {
+    let tile = document.getElementById('board').lastElementChild;
+    while (tile) {
+        document.getElementById('board').removeChild(tile);
+        tile = document.getElementById('board').lastElementChild;
+    }
+}
+
+function resetGameVariables() {
+    board = [];
+    minesLocation = [];
+    tilesClicked = 0;
+    flagEnabled = false;
+    gameOver = false;
+
+    minesCount = document.getElementById('number-of-mines').value;
+    if (minesCount > maxMines) {
+        minesCount = maxMines;
+    }
+    if (minesCount < minMines){
+        minesCount = minMines;
+    }
+    minesRemaining = minesCount;
+
+    rows = document.getElementById('number-of-rows').value;
+    if (rows > maxRows) {
+        rows = maxRows;
+    }
+    if (rows < minRows){
+        rows = minRows;
+    }
+
+    columns = document.getElementById('number-of-columns').value;
+    if (columns > maxColumns) {
+        columns = maxColumns;
+    }
+    if (columns < minColumns){
+        columns = minColumns;
+    }
+}
+
+function setupGame() {
+    clearBoard();
+    resetGameVariables();
+    startGame();
+}
 
 function setMines() {
-
     let minesLeft = minesCount;
     while (minesLeft > 0) {
         let r = Math.floor(Math.random()*rows);
@@ -26,8 +83,9 @@ function setMines() {
     }
 }
 
+
 function startGame() {
-    document.getElementById('mines-count').innerText = minesCount;
+    document.getElementById('mines-count').innerText = minesRemaining;
     document.getElementById('flag-button').addEventListener('click', setFlag);
     setMines();
 
@@ -44,7 +102,7 @@ function startGame() {
         }
         board.push(row);
     }
-    console.log(board)
+    // console.log(board)
 }
 
 function setFlag() {
@@ -70,9 +128,13 @@ function clickTile() {
     if (flagEnabled) {
         if (tile.innerText == '') {
             tile.innerText = '🚩';
+            minesRemaining -= 1;
+            document.getElementById('mines-count').innerText = minesRemaining;
         }
         else if (tile.innerText == '🚩') {
             tile.innerText = '';
+            minesRemaining += 1;
+            document.getElementById('mines-count').innerText = minesRemaining;
         }
         return;
     }
@@ -136,7 +198,7 @@ function checkMines(r, c) {
     }
 
     if (tilesClicked == rows*columns - minesCount) {
-        document.getElementById('mines-count').innerText = 'Cleared';
+        document.getElementById('mines-count').innerText = 'CLEARED!';
         gameOver = true;
     }
 }

@@ -4,15 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Minesweeper</title>
     <link rel="stylesheet" href="minesweeper.css">
     <script src='minesweeper.js'></script>
 </head>
 <body>
-    <h1>Mines: <span id = 'mines-count'>0</span></h1>
+    <!-- <h1>Minesweeper</h1> -->
+    <p>Number of rows: <input id="number-of-rows" type='number' value="8"/>
+    </p>
+    <p>Number of columns: <input id="number-of-columns" type='number' value="8"/>
+    </p>
+    <p>Number of mines: <input id="number-of-mines" type='number' value="5"/>
+    </p>
+    <input id="start-button" type="submit" value="New Game" onclick="setupGame();"/>
+
+    <h3>Mines remaining: <span id = 'mines-count'>0</span></h3>
     <div id='board'></div>
     <br>
     <button id='flag-button'>🚩</button>
+
     
 </body>
 </html>
