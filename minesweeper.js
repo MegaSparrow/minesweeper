@@ -1,26 +1,25 @@
 var board = [];
-
-var rows = 8;
-const maxRows = 15;
-const minRows = 3;
-
-var columns = 8;
-const maxColumns = 15;
-const minColumns = 3;
+var rows = initRows;
+var columns = initColumns;
+var minesCount = initMines;
 
 const maxMines = rows*columns - 1;
-const minMines = 1;
-var minesCount = 5;
+
 var minesRemaining = minesCount;
 var minesLocation = []; // '2-1', '3-2'
 
 var tilesClicked = 0; // goal to click all tiles except the mines
 var flagEnabled = false;
-
 var gameOver = false;
 
 window.onload = function () {
     setupGame();
+}
+
+function setupGame() {
+    clearBoard();
+    resetGameVariables();
+    startGame();
 }
 
 function clearBoard() {
@@ -64,12 +63,6 @@ function resetGameVariables() {
     if (columns < minColumns){
         columns = minColumns;
     }
-}
-
-function setupGame() {
-    clearBoard();
-    resetGameVariables();
-    startGame();
 }
 
 function setMines() {
@@ -173,9 +166,10 @@ function revealMines() {
         tile.classList.add('tile-bomb');
     }
     let tiles = document.getElementsByClassName("tile-flagged")
+    console.log(tiles)
     for (i in tiles) {
         let tile = tiles[i];
-        tile.classList.add('tile-wrong-bomb')
+        tile.classList.add('tile-wrong-bomb');
     }
 }
 
