@@ -183,7 +183,7 @@ function checkMines(r, c) {
     if (r<0 || r>=rows || c<0 || c>=columns) {
         return;
     }
-    if (board[r][c].classList.contains('tile-clicked')) {
+    if (board[r][c].classList.contains('tile-clicked') || board[r][c].classList.contains('tile-flagged')) {
         return;
     }
 
