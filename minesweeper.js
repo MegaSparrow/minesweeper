@@ -2,11 +2,11 @@ var board = [];
 
 var rows = 8;
 const maxRows = 15;
-const minRows = 1;
+const minRows = 3;
 
 var columns = 8;
 const maxColumns = 15;
-const minColumns = 1;
+const minColumns = 3;
 
 const maxMines = rows*columns - 1;
 const minMines = 1;
@@ -38,6 +38,7 @@ function resetGameVariables() {
     flagEnabled = false;
     gameOver = false;
 
+    // resetting mines count
     minesCount = document.getElementById('number-of-mines').value;
     if (minesCount > maxMines) {
         minesCount = maxMines;
@@ -47,6 +48,7 @@ function resetGameVariables() {
     }
     minesRemaining = minesCount;
 
+    // resetting rows and cols
     rows = document.getElementById('number-of-rows').value;
     if (rows > maxRows) {
         rows = maxRows;
@@ -94,7 +96,6 @@ function startGame() {
         let row = [];
         let row_element = document.createElement('tr');
         for (let c = 0; c < columns; c++) {
-            // creating <div id = '0-0><\div>
             let tile = document.createElement('td');
             tile.id = r.toString() + '-' + c.toString();
             tile.addEventListener('click', clickTile);
@@ -129,16 +130,21 @@ function clickTile() {
 
     // if flag button is enabled
     if (flagEnabled) {
-        if (tile.innerText == '') {
-            tile.innerText = '🚩';
+        if (!tile.classList.contains('tile-flagged')) {
+            tile.classList.add('tile-flagged');
             minesRemaining -= 1;
             document.getElementById('mines-count').innerText = minesRemaining;
         }
-        else if (tile.innerText == '🚩') {
-            tile.innerText = '';
+        else if (tile.classList.contains('tile-flagged')) {
+            tile.classList.remove('tile-flagged');
             minesRemaining += 1;
             document.getElementById('mines-count').innerText = minesRemaining;
         }
+        return;
+    }
+
+    // if the tile has a flag on and the flag button is NOT enabled do nothing
+    if (tile.classList.contains('tile-flagged')) {
         return;
     }
 
@@ -161,10 +167,16 @@ function clickTile() {
 function revealMines() {
     for (i in minesLocation) {
         let tile = document.getElementById(minesLocation[i]);
-        tile.innerText = '💣';
-        tile.style.backgroundColor = 'red';
+        if (tile.classList.contains('tile-flagged')) {
+            tile.classList.remove('tile-flagged')
+        }
+        tile.classList.add('tile-bomb');
     }
-
+    let tiles = document.getElementsByClassName("tile-flagged")
+    for (i in tiles) {
+        let tile = tiles[i];
+        tile.classList.add('tile-wrong-bomb')
+    }
 }
 
 function checkMines(r, c) {
